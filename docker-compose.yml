@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: lexrag-postgres
+
+    environment:
+      POSTGRES_USER: lexrag
+      POSTGRES_PASSWORD: lexrag123
+      POSTGRES_DB: lexrag
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: lexrag-redis
+
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
