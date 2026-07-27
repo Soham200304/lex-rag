@@ -3,6 +3,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     app_name: str
     debug: bool
+    secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
 
     database_url: str
 
