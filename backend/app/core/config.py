@@ -9,6 +9,9 @@ class Settings(BaseSettings):
 
     database_url: str
 
+    storage_path: str = "storage/documents"
+    max_file_size: int = 10 * 1024 * 1024
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
