@@ -32,6 +32,18 @@ class DocumentRepository:
 
         return result.scalar_one_or_none()
 
+    async def get_by_document_id(
+        self,
+        document_id: UUID,
+    ) -> Document | None:
+        result = await self.db.execute(
+            select(Document).where(
+                Document.id == document_id
+            )
+        )
+
+        return result.scalar_one_or_none()
+
     async def get_all_by_owner(
         self,
         owner_id: UUID,

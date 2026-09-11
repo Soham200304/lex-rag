@@ -1,4 +1,5 @@
 from uuid import UUID
+from app.core.redis import create_redis_pool
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -58,10 +59,23 @@ async def upload_document(
     service = DocumentService(repository)
 
     try:
-        return await service.upload_document(
-            file= file,
+        document = await service.upload_document(
+            file=file,
             owner_id=current_user.id,
         )
+
+        redis = await create_redis_pool()
+
+        try:
+            await redis.enqueue_job(
+                "process_document_task",
+                str(document.id),
+            )
+        finally:
+            await redis.close()
+
+        return document
+
     except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
